@@ -1308,13 +1308,16 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
     public void removeFeatureAt(int index) {
+        MapFeature feature;
         if (savedFeatures != null) {
             if (index < savedFeatures.size()) {
-                savedFeatures.remove(index);
+                feature = savedFeatures.remove(index);
+            } else {
+                return;
             }
-            return;
+        } else {
+            feature = features.remove(index);
         }
-        MapFeature feature = features.remove(index);
         if (feature instanceof MapMarker) {
             markerMap.remove(feature.getFeature());
             feature.removeFromMap(markerCollection);
