@@ -228,8 +228,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
     }
 
 
-    @Override
-    public void onPause(LifecycleOwner owner) {
+    public void pauseSafely() {
         if (hasPermissions() && map != null) {
             //noinspection MissingPermission
             map.setMyLocationEnabled(false);
@@ -241,6 +240,11 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
                 paused = true;
             }
         }
+    }
+
+    @Override
+    public void onPause(LifecycleOwner owner) {
+        pauseSafely();
     }
 
     @Override
@@ -369,8 +373,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
 
             // Pause safely if not already paused
             if (!paused) {
-                onPause();
-                paused = true;
+                pauseSafely();
             }
         }
 
@@ -793,8 +796,7 @@ public class MapView extends com.google.android.gms.maps.MapView implements Goog
         savedFeatures = null;
         try {
             if (!paused) {
-                onPause();
-                paused = true;
+                pauseSafely();
             }
             onDestroy();
             detachLifecycleObserver();
